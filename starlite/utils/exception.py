@@ -1,9 +1,9 @@
+from dataclasses import dataclass, field
 from inspect import getmro
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union, cast
 
-from pydantic import BaseModel
-
 from starlite.status_codes import HTTP_500_INTERNAL_SERVER_ERROR
+from starlite.utils.dataclasses import DataclassSerializerMixin
 
 if TYPE_CHECKING:
     from typing import Type
@@ -44,16 +44,17 @@ def get_exception_handler(exception_handlers: "ExceptionHandlersMap", exc: Excep
     return None
 
 
-class ExceptionResponseContent(BaseModel):
+@dataclass(frozen=True)
+class ExceptionResponseContent(DataclassSerializerMixin):
     """Represent the contents of an exception-response."""
 
     status_code: int
     """Exception status code."""
     detail: str
     """Exception details or message."""
-    headers: Optional[Dict[str, str]] = None
+    headers: Optional[Dict[str, str]] = field(default=None)
     """Headers to attach to the response."""
-    extra: Optional[Union[Dict[str, Any], List[Any]]] = None
+    extra: Optional[Union[Dict[str, Any], List[Any]]] = field(default=None)
     """An extra mapping to attach to the exception."""
 
     def to_response(self) -> "Response":

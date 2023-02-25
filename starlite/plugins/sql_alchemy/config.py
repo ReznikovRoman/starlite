@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -19,6 +20,7 @@ from starlite.datastructures.state import State  # noqa: TC001
 from starlite.exceptions import MissingDependencyException
 from starlite.types import BeforeMessageSendHookHandler
 from starlite.utils import AsyncCallable
+from starlite.utils.dataclasses import DataclassSerializerMixin
 from starlite.utils.serialization import decode_json, encode_json
 
 from .types import SessionMakerInstanceProtocol, SessionMakerTypeProtocol
@@ -80,62 +82,58 @@ async def default_before_send_handler(message: "Message", _: "State", scope: "Sc
         del scope[SESSION_SCOPE_KEY]  # type: ignore
 
 
-class SQLAlchemySessionConfig(BaseModel):
+@dataclass
+class SQLAlchemySessionConfig(DataclassSerializerMixin):
     """Configuration for a SQLAlchemy-Session."""
 
-    class Config(BaseConfig):
-        arbitrary_types_allowed = True
-
-    autocommit: Optional[bool] = None
-    autoflush: Optional[bool] = None
-    bind: Optional[Any] = None
-    binds: Optional[Any] = None
-    enable_baked_queries: Optional[bool] = None
-    expire_on_commit: bool = False
-    future: Optional[bool] = None
-    info: Optional[Dict[str, Any]] = None
-    query_cls: Optional[Type[Query]] = None
-    twophase: Optional[bool] = None
+    autocommit: Optional[bool] = field(default=None)
+    autoflush: Optional[bool] = field(default=None)
+    bind: Optional[Any] = field(default=None)
+    binds: Optional[Any] = field(default=None)
+    enable_baked_queries: Optional[bool] = field(default=None)
+    expire_on_commit: bool = field(default=False)
+    future: Optional[bool] = field(default=None)
+    info: Optional[Dict[str, Any]] = field(default=None)
+    query_cls: Optional[Type[Query]] = field(default=None)
+    twophase: Optional[bool] = field(default=None)
 
 
-class SQLAlchemyEngineConfig(BaseModel):
+@dataclass(frozen=True)
+class SQLAlchemyEngineConfig(DataclassSerializerMixin):
     """Configuration for SQLAlchemy's :class`Engine <sqlalchemy.engine.Engine>`.
 
     For details see: https://docs.sqlalchemy.org/en/14/core/engines.html
     """
 
-    class Config(BaseConfig):
-        arbitrary_types_allowed = True
-
-    connect_args: Optional[Dict[str, Any]] = None
-    echo: Optional[bool] = None
-    echo_pool: Optional[bool] = None
-    enable_from_linting: Optional[bool] = None
-    future: bool = True
-    hide_parameters: Optional[bool] = None
-    isolation_level: Optional[IsolationLevel] = None
-    json_deserializer: Callable[[str], Any] = decode_json
-    json_serializer: Callable[[Any], str] = serializer
-    label_length: Optional[int] = None
-    listeners: Any = None
-    logging_level: Optional[Union[int, str]] = None
-    logging_name: Optional[str] = None
-    max_identifier_length: Optional[int] = None
-    max_overflow: Optional[int] = None
-    module: Any = None
-    paramstyle: Optional[Literal["qmark", "numeric", "named", "format", "pyformat"]] = None
-    plugins: Optional[List[str]] = None
-    pool: Optional[Pool] = None
-    pool_logging_name: Optional[str] = None
-    pool_pre_ping: Optional[bool] = None
-    pool_recycle: Optional[int] = None
-    pool_reset_on_return: Optional[Literal["rollback", "commit"]] = None
-    pool_size: Optional[int] = None
-    pool_timeout: Optional[int] = None
-    pool_use_lifo: Optional[bool] = None
-    poolclass: Optional[Type[Pool]] = None
-    query_cache_size: Optional[int] = None
-    strategy: Optional[str] = None
+    connect_args: Optional[Dict[str, Any]] = field(default=None)
+    echo: Optional[bool] = field(default=None)
+    echo_pool: Optional[bool] = field(default=None)
+    enable_from_linting: Optional[bool] = field(default=None)
+    future: bool = field(default=True)
+    hide_parameters: Optional[bool] = field(default=None)
+    isolation_level: Optional[IsolationLevel] = field(default=None)
+    json_deserializer: Callable[[str], Any] = field(default=decode_json)
+    json_serializer: Callable[[Any], str] = field(default=serializer)
+    label_length: Optional[int] = field(default=None)
+    listeners: Any = field(default=None)
+    logging_level: Optional[Union[int, str]] = field(default=None)
+    logging_name: Optional[str] = field(default=None)
+    max_identifier_length: Optional[int] = field(default=None)
+    max_overflow: Optional[int] = field(default=None)
+    module: Any = field(default=None)
+    paramstyle: Optional[Literal["qmark", "numeric", "named", "format", "pyformat"]] = field(default=None)
+    plugins: Optional[List[str]] = field(default=None)
+    pool: Optional[Pool] = field(default=None)
+    pool_logging_name: Optional[str] = field(default=None)
+    pool_pre_ping: Optional[bool] = field(default=None)
+    pool_recycle: Optional[int] = field(default=None)
+    pool_reset_on_return: Optional[Literal["rollback", "commit"]] = field(default=None)
+    pool_size: Optional[int] = field(default=None)
+    pool_timeout: Optional[int] = field(default=None)
+    pool_use_lifo: Optional[bool] = field(default=None)
+    poolclass: Optional[Type[Pool]] = field(default=None)
+    query_cache_size: Optional[int] = field(default=None)
+    strategy: Optional[str] = field(default=None)
 
 
 class SQLAlchemyConfig(BaseModel):
