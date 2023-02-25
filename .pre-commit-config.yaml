@@ -156,7 +156,7 @@ repos:
             fakeredis,
           ]
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.294
+    rev: v1.1.295
     hooks:
       - id: pyright
         exclude: "tools|piccolo*|examples/plugins/sqlalchemy_plugin*|using_offset_pagination_with_sqlalchemy"
