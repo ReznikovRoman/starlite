@@ -333,17 +333,17 @@ class JWTCookieAuth(Generic[UserType], JWTAuth[UserType]):
 
 
 class OAuth2Login(BaseModel):
-    """OAuth2 Login DTO"""
+    """OAuth2 Login DTO."""
 
     class Config(BaseConfig):
         extra = Extra.allow
 
     access_token: str
-    """Valid JWT access token"""
+    """Valid JWT access token."""
     refresh_token: Optional[str] = None
-    """Optional valid refresh token JWT"""
+    """Optional valid refresh token JWT."""
     expires_in: Optional[int] = None
-    """Expiration time of the token in seconds. """
+    """Expiration time of the token in seconds."""
     token_type: str
 
 

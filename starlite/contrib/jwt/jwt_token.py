@@ -61,7 +61,6 @@ class Token(BaseModel):
         Returns:
             The validated datetime.
         """
-
         value = _normalize_datetime(value)
         if value.timestamp() >= _normalize_datetime(datetime.now(timezone.utc)).timestamp():
             return value

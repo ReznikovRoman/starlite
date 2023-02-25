@@ -1,3 +1,4 @@
+import copy
 from abc import ABC, abstractmethod
 from typing import (
     TYPE_CHECKING,
@@ -95,7 +96,7 @@ class AbstractSecurityConfig(ABC, Generic[UserType, AuthType], GenericModel):
         app_config.middleware.insert(0, self.middleware)
 
         if app_config.openapi_config:
-            app_config.openapi_config = app_config.openapi_config.copy()
+            app_config.openapi_config = copy.copy(app_config.openapi_config)
             if isinstance(app_config.openapi_config.components, list):
                 app_config.openapi_config.components.append(self.openapi_components)
             elif app_config.openapi_config.components:
